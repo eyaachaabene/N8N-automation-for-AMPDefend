@@ -18,6 +18,10 @@ Together, they provide **automated alert management + live dashboards** to stren
 * Stores alerts in **Postgres**.
 * Summarizes logs into **human-readable WhatsApp/email alerts**.
 * Generates **monthly AI reports** → exported to **Google Docs + Drive**.
+---
+  <img width="2291" height="1170" alt="Capture d'écran 2025-09-14 201134" src="https://github.com/user-attachments/assets/6e54379b-a2c9-49e3-b6da-cec25791417c" />
+  
+---
 
 ### 📊 Metabase (Analytics Layer)
 
@@ -27,7 +31,11 @@ Together, they provide **automated alert management + live dashboards** to stren
   * Threat detection timeline (hourly/daily).
   * Threat type distribution by severity.
   * Geo heatmap of alerts by region/country.
- 
+---
+
+  <img width="2148" height="1233" alt="image" src="https://github.com/user-attachments/assets/3a4ebd0c-559c-4ab6-b9ae-d0344209536c" />
+
+
 ---
 
 ## ⚙️ Architecture
