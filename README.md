@@ -96,11 +96,3 @@ This will launch:
 * **Better visibility** → Metabase dashboards.
 * **Audit-ready** → Monthly AI reports stored in Google Docs & Drive.
 
----
-
-👉 This way, your repo clearly says:
-
-* It’s **not just n8n**, but **n8n + Metabase**.
-* You’ve included **setup instructions** for both.
-
-Do you want me to also prepare a **docker-compose.yml example** that runs **n8n + Postgres + Metabase** together (with named volumes + networks)? That way anyone cloning your repo can spin up the full stack instantly.
