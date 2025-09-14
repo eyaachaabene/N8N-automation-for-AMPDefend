@@ -76,20 +76,6 @@ This will launch:
 
 ---
 
-## ⚙️ Metabase Setup
-
-Once containers are running:
-
-1. Import predefined **Metabase dashboards** from `metabase_queries.txt`.
-
-2. Example Dashboards:
-
-   * 📆 **Threat detection timeline** (hourly/daily)
-   * ⚠️ **Threat type distribution by severity**
-   * 🌍 **Geo heatmap** (alert sources)
-  
----
-
 ## 📂 Repository Structure
 
 ```
