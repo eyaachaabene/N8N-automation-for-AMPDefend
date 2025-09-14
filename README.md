@@ -84,19 +84,6 @@ This will launch:
 
 ---
 
-## 📂 Repository Structure
-
-```
-├── workflow.json              # n8n workflow export
-├── docker-compose.yml          # Orchestration (n8n, Postgres, Metabase)
-├── README.md                  # Documentation
-├── docs/                      # Example reports, screenshots
-├── metabase_queries.txt       # SQL queries / sample dashboards
-└── .env.example               # Example environment variables
-```
-
----
-
 ## 🛡️ Security Benefits
 
 * **Reduced alert fatigue** → AI summaries.
