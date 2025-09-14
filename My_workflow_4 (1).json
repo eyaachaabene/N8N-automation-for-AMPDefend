@@ -1,0 +1,682 @@
+{
+  "name": "My workflow 4",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ec07343d-c58e-4591-b0d5-abe742db1d1c",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -400,
+        -60
+      ],
+      "id": "25ca0d23-20c6-4cc5-ba75-005b950eae03",
+      "name": "Webhook",
+      "webhookId": "ec07343d-c58e-4591-b0d5-abe742db1d1c"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        300
+      ],
+      "id": "d06c07e5-12c3-45dc-b041-9315de436bf5",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "sendTo": "eyachaabene0@gmail.com",
+        "subject": "🚨 [AMPDefend] Security Alert – Immediate Attention Required",
+        "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>AMPDefend Alert</title>\n<style>\n  body {\n    font-family: Arial, sans-serif;\n    background-color: #f7f7f7;\n    color: #333333;\n    margin: 0;\n    padding: 0;\n  }\n  .container {\n    max-width: 600px;\n    margin: 20px auto;\n    background-color: #ffffff;\n    border-radius: 8px;\n    box-shadow: 0 2px 6px rgba(0,0,0,0.1);\n    padding: 20px;\n  }\n  .header {\n    font-size: 20px;\n    font-weight: bold;\n    color: #d32f2f; /* red for alert */\n    margin-bottom: 10px;\n  }\n  .alert-message {\n    background-color: #fff3cd; /* light yellow background for alert */\n    border-left: 6px solid #ffc107; /* gold bar */\n    padding: 10px 15px;\n    margin: 15px 0;\n    border-radius: 4px;\n    font-weight: bold;\n  }\n  .footer {\n    font-size: 14px;\n    color: #777777;\n    margin-top: 20px;\n  }\n  .button {\n    display: inline-block;\n    padding: 10px 15px;\n    background-color: #1976d2; /* blue */\n    color: white;\n    text-decoration: none;\n    border-radius: 4px;\n    margin-top: 15px;\n  }\n</style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">🚨 AMPDefend Security Alert</div>\n    <p>Hello <strong>Operator</strong>,</p>\n    <p>An alert has been detected by the AMPDefend Smart Honeypot Shield:</p>\n    \n    <div class=\"alert-message\">\n      {{ $json.output }}\n    </div>\n\n    <p>Please take the recommended actions immediately to ensure the safety of your energy infrastructure.</p>\n    \n   \n    <div class=\"footer\">\n      AMPDefend Monitoring System<br>\n      &copy; 2025 AMP Labs\n    </div>\n  </div>\n</body>\n</html>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        440,
+        -60
+      ],
+      "id": "76e64211-9acb-4d56-9bd6-49f68ede84c0",
+      "name": "Gmail",
+      "webhookId": "95d543e7-f3a2-412c-b7ee-ff93bdf477b6",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "DToB1y44WozatwFe",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Webhook').item.json.body.alerts.alert1 }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a cybersecurity assistant for AMPDefend. \nYour role is to convert raw security or fraud detection logs into short, human-readable WhatsApp alerts. \nThe message must be clear, professional, and easily understood by utility operators (like STEG engineers) or clients. \n\nRules:\n- Always include the device/location if available.\n- Highlight the severity (Low, Medium, High).\n- Use concise language (max 2 sentences).\n- Add an action suggestion when relevant (e.g., \"Check smart meter\", \"Block IP\", \"Investigate unusual consumption\").\n- Do NOT include raw technical fields, IDs, or JSON. Summarize into plain text.\n\nOutput: A single WhatsApp-ready alert message.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        60,
+        -100
+      ],
+      "id": "3da2cd4c-8a29-4276-8ce7-e2a0640bf4b1",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        100,
+        160
+      ],
+      "id": "b40c3d3c-539b-4a7c-8c46-76be109bad0a",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "EHLUkdnixJjfH3sS",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "716769384848601",
+        "recipientPhoneNumber": "+21621074001",
+        "template": "alert_detect|en",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "=  {{ $('Webhook').item.json.body.alerts.alert1.alert_type }}"
+                  },
+                  {
+                    "text": "={{ $('Webhook').item.json.body.alerts.alert1.city }}({{ $('Webhook').item.json.body.alerts.alert1.loc }})"
+                  },
+                  {
+                    "text": "={{ $('Webhook').item.json.body.alerts.alert1.device_id }}"
+                  },
+                  {
+                    "text": "={{ $('Webhook').item.json.body.alerts.alert1.ip_blocked }}"
+                  },
+                  {
+                    "text": "={{ $json.output }}"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "header",
+              "headerParameters": {
+                "parameter": [
+                  {
+                    "text": "={{ $('Webhook').item.json.body.alerts.alert1.severity }} severity"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        920,
+        -100
+      ],
+      "id": "f3869302-a0c5-4976-b8d9-e3742c393d3f",
+      "name": "WhatsApp Business Cloud1",
+      "webhookId": "025dd961-f007-4710-ac3d-f0ac2e57d986",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "yD2oGJ7MKll7fgWm",
+          "name": "WhatsApp account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.all_logs }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Generate a monthly cybersecurity report from the following logs:\n\n{{$json.all_logs}}\n\nThe report should:\n1. Summarize total alerts, high severity alerts, and fraud/energy theft attempts.\n2. Group by device type, city, and severity.\n3. Detect patterns or recurring issues.\n4. Include actionable recommendations.\nReturn the report in Markdown format with headings, subheadings, and bullet points.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        840,
+        340
+      ],
+      "id": "fc5f6dce-6f4b-446d-b17f-a6c70252d54e",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-20b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        860,
+        560
+      ],
+      "id": "f9ea2990-f0af-4643-b01e-d32e2b62b8f2",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "EHLUkdnixJjfH3sS",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ $('Google Docs').item.json.id }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "insert",
+              "text": "={{ $('AI Agent1').item.json.output }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        1800,
+        400
+      ],
+      "id": "4fea0415-899a-4e10-bbd7-1c5b2f28520b",
+      "name": "Google Docs1",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "cAeSPUveZgp9Kp0j",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Function node: Combine all rows into one array\nreturn [\n  {\n    json: {\n      all_logs: items.map(item => item.json)\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        340
+      ],
+      "id": "f3842779-05ac-454c-a846-63e0c0876987",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "folderId": "1kAe6C2dRpRt3VuVnlYkB62AS_Y9dWsSr",
+        "title": "=monthly report -{{ $json.currentDate }}"
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        1520,
+        440
+      ],
+      "id": "6fe757b3-c5d5-4764-95a2-011c2cdba549",
+      "name": "Google Docs",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "cAeSPUveZgp9Kp0j",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        420
+      ],
+      "id": "c884e16a-2e88-4c36-a2b9-9ce582c8bec9",
+      "name": "Date & Time"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Webhook').item.json.body.alerts.alert1 }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a cybersecurity assistant for AMPDefend. \nYour role is  to output an action suggestion when relevant (e.g., \"Check smart meter\", \"Block IP\", \"Investigate unusual consumption\").\n \n\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        600,
+        -80
+      ],
+      "id": "e5bd813b-98e4-4776-bd07-498b03c64f5d",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        620,
+        160
+      ],
+      "id": "42082f93-d512-4fb7-9c67-d097fe84c862",
+      "name": "Groq Chat Model2",
+      "credentials": {
+        "groqApi": {
+          "id": "EHLUkdnixJjfH3sS",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list",
+          "cachedResultName": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "alerts",
+          "mode": "list",
+          "cachedResultName": "alerts"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "alert_type": "={{ $json.body.alerts.alert1.alert_type }}",
+            "city": "={{ $json.body.alerts.alert1.city }}",
+            "country": "={{ $json.body.alerts.alert1.country }}",
+            "device_id": "={{ $json.body.alerts.alert1.device_id }}",
+            "ip_blocked": "={{ $json.body.alerts.alert1.ip_blocked }}",
+            "loc": "={{ $json.body.alerts.alert1.loc }}",
+            "org": "={{ $json.body.alerts.alert1.org }}",
+            "public_ip": "={{ $json.body.alerts.alert1.public_ip }}",
+            "raw_message": "={{ $json.body.alerts.alert1.raw_message }}",
+            "region": "={{ $json.body.alerts.alert1.region }}",
+            "severity": "={{ $json.body.alerts.alert1.severity }}",
+            "timestamp": "={{ $json.body.alerts.alert1.timestamp }}",
+            "timezone": "={{ $json.body.alerts.alert1.timezone }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "alert_type",
+              "displayName": "alert_type",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "city",
+              "displayName": "city",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "country",
+              "displayName": "country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "device_id",
+              "displayName": "device_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ip_blocked",
+              "displayName": "ip_blocked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "loc",
+              "displayName": "loc",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "org",
+              "displayName": "org",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "public_ip",
+              "displayName": "public_ip",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "raw_message",
+              "displayName": "raw_message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "region",
+              "displayName": "region",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "severity",
+              "displayName": "severity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "timezone",
+              "displayName": "timezone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "uploaded_at",
+              "displayName": "uploaded_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -180,
+        -100
+      ],
+      "id": "381c6bc6-c582-4bdb-bf2d-c646ff776aad",
+      "name": "Postgres",
+      "credentials": {
+        "postgres": {
+          "id": "OZLPjVe4ITSdiN2K",
+          "name": "Postgres account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "select * from alerts",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -480,
+        300
+      ],
+      "id": "7d42dc1c-e327-4141-896c-7a1df7b15f42",
+      "name": "Postgres1",
+      "credentials": {
+        "postgres": {
+          "id": "OZLPjVe4ITSdiN2K",
+          "name": "Postgres account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Postgres1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Date & Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "main": [
+        [
+          {
+            "node": "Google Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Docs": {
+      "main": [
+        [
+          {
+            "node": "Google Docs1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Business Cloud1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "685134fa-5700-4412-87ee-bd726b8ccfbb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4cac4657552308f1780edba6184b7a03626eb0b439ee29334ce33c67018ceac0"
+  },
+  "id": "j0btzOb664tc0o1j",
+  "tags": []
+}
