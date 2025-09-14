@@ -1,0 +1,45 @@
+#Threat detection timeline (hourly)
+
+SELECT
+  date_trunc('hour',
+    to_timestamp(
+      substring("timestamp" from '([A-Za-z]{3} [A-Za-z]{3} [ 0-9]{1,2} [0-9:]{8})') || ' ' || right("timestamp", 4),
+      'Dy Mon DD HH24:MI:SS YYYY'
+    )
+  ) AS hour,
+  count(*) AS alerts_count
+FROM alerts
+WHERE "timestamp" IS NOT NULL
+GROUP BY hour
+ORDER BY hour;
+
+
+
+#Threat type distribution by Severity
+
+
+SELECT
+  "public"."alerts_v"."severity" AS "severity",
+  COUNT(*) AS "count"
+FROM
+  "public"."alerts_v"
+GROUP BY
+  "public"."alerts_v"."severity"
+ORDER BY
+  "public"."alerts_v"."severity" ASC
+
+
+#Geo heatmap
+
+SELECT
+  "public"."alerts_v"."latitude" AS "latitude",
+  "public"."alerts_v"."longitude" AS "longitude",
+  COUNT(*) AS "count"
+FROM
+  "public"."alerts_v"
+GROUP BY
+  "public"."alerts_v"."latitude",
+  "public"."alerts_v"."longitude"
+ORDER BY
+  "public"."alerts_v"."latitude" ASC,
+  "public"."alerts_v"."longitude" ASC
